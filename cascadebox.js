@@ -112,13 +112,11 @@ _cascadebox.prototype = {
             var this_div = $(this).parent().parent().parent().parent();
             var top_div = this_div.parent();
             var parentid = this_div.attr('parent_id');
-
             var id = $(this).val();
-
+            var firstbox_nochildren_op = false;
             if(id == -1){
-                var this_div_parent_id = this_div.attr('parent_id');
                 if(flag){
-                    if(this_div_parent_id == 0){
+                    if(parentid == 0){
                         $('.cascadebox').find(':checkbox').prop('checked',true);
                     }else{
                         this_div.find(':checkbox').prop('checked',true);
@@ -140,7 +138,7 @@ _cascadebox.prototype = {
 
 
                 }else{
-                    if(this_div_parent_id == 0){
+                    if(parentid == 0){
                         $('.cascadebox').find(':checkbox').prop('checked',false);
                     }else{
                         this_div.find(':checkbox').prop('checked',false);
@@ -162,13 +160,35 @@ _cascadebox.prototype = {
                 }
             }else{
                 var has_children = $(this).parent().parent().attr('has_children');
-                if(has_children){
+                if(has_children == 1){
                     var children_all_checkbox  =  top_div.parent().find('div[parent_id='+id+']').find(':checkbox[value="-1"]');
                     children_all_checkbox.trigger('click');
+                }else{
+                    if(parentid == 0){
+                        firstbox_nochildren_op = true;
+                    }else{
+                        firstbox_nochildren_op = false;
+                    }
                 }
+
             }
-            that.change_all(top_div,parentid,id,flag);
-            that.showChecked();
+
+            if(parentid != 0){
+                that.change_all(top_div,parentid,id,flag);
+            }
+
+            if(firstbox_nochildren_op){
+                if(flag){
+                    var text = $(this).parent().next('label').html();
+                    $('.cascadebox_header').append("<div><label>"+text+"</label><span v="+id+">x</span></div>");
+                }else{
+                    $('.cascadebox_header').find('span[v='+id+']').parent().remove();
+                }
+
+            }else{
+                that.showChecked();
+            }
+
         });
 
         //搜索
@@ -227,42 +247,78 @@ _cascadebox.prototype = {
     },
     showChecked:function(){
         var html = '<a class="clear_header">清空全部已选</a>';
+        var top_box = $("#"+this.dom_id).find('div[parent_id=0]');
+        var top_box_all_flag = top_box.find(':checked[value="-1"]').is(':checked');
+        var all_select_first_box = false;
+        if(top_box_all_flag){
+            //如果顶级选项全新，并且所有选项都有复选框，那么直接显示所有顶级选项
+            var all_has_checkbox = true;
+            top_box.find('li').each(function () {
+                if($(this).attr('v') == undefined || $(this).attr('v') == -1) return;
+                var checkbox_input = $(this).find('input');
+                if(checkbox_input.length == 1){
+                    var text = checkbox_input.parent().next('label').html();
+                    var id = checkbox_input.val();
+                    html += "<div><label>"+text+"</label><span v="+id+">x</span></div>";
+                }else{
+                    all_has_checkbox = false;
+                }
 
-        $("#"+this.dom_id+" input:checked").not('.hide2 input:checked').each(function(i,e){
-            var obj = $(this);
-            var parent_ul = obj.parent().parent().parent();
-            var text = obj.parent().next('label').html();
-            var id = obj.val();
-            if(id == -1) return;//如果是全选选项，跳过
-            var all_flag = parent_ul.find(':checked[value="-1"]').is(':checked');
-            var parent_id = parent_ul.parent().attr('parent_id');
-            var checkbox_input = $('.cascadebox li[v='+parent_id+']').find('input');
+            });
+            if(all_has_checkbox){
+                all_select_first_box = true;
+            }else{
+                all_select_first_box = false;
+            }
+        }else{
+            all_select_first_box = false;
+        }
 
-            if(all_flag && parent_id != 0 && checkbox_input.length == 1) return;//如果给box的全选被选中，且父级有checkbox，则不显示，直接显示父级
+        if(!all_select_first_box){
+            html = '<a class="clear_header">清空全部已选</a>';
+            $("#"+this.dom_id+" input:checked").not('.hide2 input:checked').each(function(i,e){
+                var obj = $(this);
+                var parent_ul = obj.parent().parent().parent();
+                var text = obj.parent().next('label').html();
+                var id = obj.val();
+                if(id == -1) return;//如果是全选选项，跳过
+                var all_flag = parent_ul.find(':checked[value="-1"]').is(':checked');
+                var parent_id = parent_ul.parent().attr('parent_id');
+                var checkbox_input = $('.cascadebox li[v='+parent_id+']').find('input');
 
-            html += "<div><label>"+text+"</label><span v="+id+">x</span></div>";
-        });
+                if(all_flag && parent_id != 0 && checkbox_input.length == 1) return;//如果给box的全选被选中，且父级有checkbox，则不显示，直接显示父级
+
+                html += "<div><label>"+text+"</label><span v="+id+">x</span></div>";
+            });
+
+        }
+
 
         $("#"+this.dom_id+" .cascadebox_header").html(html);
         $("#"+this.dom_id+" .cascadebox_header span").on('click',function(){
             var obj = $(this);
             var id = obj.attr('v');
-
-            if(obj.parent().parent().find('div').length < 2){
-                obj.parent().parent().find('a').remove();
+            var span_div = obj.parent();
+            var header_div = span_div.parent();
+            if(header_div.find('div').length < 2){
+                header_div.find('a').remove();
             }
-            obj.parent().parent().prev(".cascadebox_list").find(':checkbox[value='+id+']').trigger('click');
-            obj.parent().remove();
+            header_div.prev(".cascadebox_list").find(':checkbox[value='+id+']').trigger('click');
+            span_div.remove();
         });
 
         var that = this;
         $("#"+this.dom_id+" .cascadebox_header a").on('click',function(){
             var obj = $(this);
-            obj.parent().prev('.cascadebox_list').find(':checkbox').prop('checked',false);
-            obj.parent().html('');
+            var span_div = obj.parent();
+            span_div.prev('.cascadebox_list').find(':checkbox').prop('checked',false);
+            span_div.html('');
             $("#"+that.dom_id+" .selected").removeClass('selected');
         });
+
+
         //选中背景加深
+        //注意：如果选项数据很多，以下两句代码会导致很卡！请注释掉，不要选中背景加深了！
         $("#"+this.dom_id+" .selected").removeClass('selected');
 
         $("#"+this.dom_id+" input:checked").each(function(){
