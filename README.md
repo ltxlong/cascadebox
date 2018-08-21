@@ -3,7 +3,7 @@
 ![image](https://github.com/ltxlong/cascadebox/blob/master/cascadebox%E6%88%AA%E5%9B%BE.png)
 
 # 使用说明
-<div id='cascadebox'></div>//这个div的id顺便取名
+- <div id='cascadebox'></div> //这个div的id随便取名
 
 - 参数1：插入cascadebox的div的id；
 - 参数2：checkbox的name；
@@ -17,13 +17,14 @@
 - 重新设置选中的项：obj.set_data(select_arr)方法
 - 增加选中项：obj.add_val(id)方法
 - 删除选中项：obj.del_val(id)方法
-var obj = cascadeBox('cascadebox','checkboxname',data,[],[],true);
+
+var obj = cascadeBox('cascadebox','checkboxname',data,[],[],true); //初始化插件，返回cascadeBox实例
 var select_data = obj.get_data();
 
 ![image](https://github.com/ltxlong/cascadebox/blob/master/cascadebox%E8%AF%B4%E6%98%8E%E5%9B%BE.png)
 
 本插件开发源于业务上要移植今日头条的广告页面，要用到这一功能。
 
-# 感谢 [binwind8](https://github.com/binwind8)
+# 感谢 
 本插件在 [tntreebox](https://github.com/binwind8/tntreebox) 的基础上进行重构，优化并且增加了很多新功能
 
