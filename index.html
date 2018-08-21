@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>cascadebox</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script type="text/javascript" src="cascadebox.js?v=1"></script>
+    <link rel="stylesheet" type="text/css" href="cascadebox.css?v=1" />
+</head>
+<body style="text-align:center;">
+<div id='cascadebox'>
+
+</div>
+<input type="button" id="get_data" style="width: 100px;height: 50px;" value="获取选中数据">
+<script type="text/javascript">
+    $(function(){
+        var data = [];
+        for(var i=0;i<10;i++){
+            if(i==2){
+                var no_box = true;
+            }else{
+                var no_box = false
+            }
+            data.push({
+                id:'p_'+i,
+                name:'父选项'+i,
+                no_box:no_box,
+                level:0
+            });
+        }
+
+        for(var i=0;i<10;i++){
+            data.push({
+                id:'c_'+i,
+                name:'子选项1_'+i,
+                parent_id:'p_1',
+                level:1
+            });
+        }
+        for(var i=10;i<20;i++){
+            data.push({
+                id:'c_'+i,
+                name:'父选项2_'+i,
+                parent_id:'p_2',
+                level:1
+            });
+        }
+        for(var i=20;i< 30;i++){
+            data.push({
+                id: 'c_'+i,
+                name:'3_'+i,
+                parent_id:'c_1',
+                level:2
+            });
+        }
+        for(var i=30;i<31;i++){
+            data.push({
+                id: 'c_'+i,
+                name:'2_'+i,
+                parent_id: 'c_0',
+                level:2
+            });
+        }
+
+        //参数1：插入cascadebox的div的id；
+        //参数2：checkbox的name；
+        //参数3：cascadebox所有选择项的数据；
+        //参数4：预设选中的数据，可以为空(不传)或[]；
+        //参数5：各级别名称，可以无限级，如果为空(不传)或[]，默认为3个级别，名称为['一级选项','二级选项','三级选项']
+        //参数6：是否开启全选模式，可以为空(不传)，默认为true
+        //data的格式为：包含每个level数组，即data.push(level_arr)；如果想用本插件，但是数据格式不一致的，可以自己写js转换下就行了
+        //cascadebox最终选中值：以父级为优先，即如果一个项，如果它有子级，并且子级全选了，那么最终显示选中值为该项。如果子级不全选，则只显示选中的子级
+        //获取选中的项：obj.get_data()方法
+        //重新设置选中的项：obj.set_data(select_arr)方法
+        //增加选中项：obj.add_val(id)方法
+        //删除选中项：obj.del_val(id)方法
+
+        var obj = cascadeBox('cascadebox','checkboxname',data,["c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8", "c_9"],[],true);
+
+        $('#get_data').click(function () {
+            //获取选中的项：obj.get_data()方法
+            //obj.set_data(["c_1"]);
+            //obj.del_val('c_1');
+            //obj.add_val('c_1');
+            console.log(obj.get_data());
+        });
+
+    });
+
+</script>
+
+</body>
+</html>
