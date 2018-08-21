@@ -3,7 +3,7 @@
 ![image](https://github.com/ltxlong/cascadebox/blob/master/cascadebox%E6%88%AA%E5%9B%BE.png)
 
 # 使用说明
-```
+```html
 <div id='cascadebox'></div> //这个div的id随便取名
 ```
 - 参数1：插入cascadebox的div的id；
