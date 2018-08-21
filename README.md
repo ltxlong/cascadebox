@@ -19,9 +19,11 @@
 - 增加选中项：obj.add_val(id)方法
 - 删除选中项：obj.del_val(id)方法
 ```js
-var data = ["c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8", "c_9"];
-
-var obj = cascadeBox('cascadebox','checkboxname',data,[],[],true); //初始化插件，返回cascadeBox实例
+var pre_select_data = ["c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8", "c_9"];
+var cascadebox_header = [];
+//var cascadebox_header = ['省份','城市','区县'];
+//var obj = cascadeBox('cascadebox','checkboxname',data,[],[],true); //初始化插件，返回cascadeBox实例
+var obj = cascadeBox('cascadebox','checkboxname',data,pre_select_data,cascadebox_header,true);
 
 var select_data = obj.get_data();
 ```
