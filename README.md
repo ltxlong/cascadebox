@@ -39,7 +39,6 @@ var obj = cascadeBox('cascadebox','checkboxname',data,pre_select_data,cascadebox
 
 var select_data = obj.get_data();
 ```
-![image](https://github.com/ltxlong/cascadebox/blob/master/cascadebox%E8%AF%B4%E6%98%8E%E5%9B%BE.png)
 
 本插件开发源于业务上要移植今日头条的广告页面，要用到这一功能。
 
