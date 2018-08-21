@@ -19,14 +19,14 @@
         var data = [];
         for(var i=0;i<10;i++){
             if(i==2){
-                var no_box = true;
+                var no_checkbox = true;
             }else{
-                var no_box = false
+                var no_checkbox = false
             }
             data.push({
                 id:'p_'+i,
                 name:'父选项'+i,
-                no_box:no_box,
+                no_checkbox:no_checkbox,
                 level:0
             });
         }
@@ -70,8 +70,20 @@
         //参数4：预设选中的数据，可以为空(不传)或[]；
         //参数5：各级别名称，可以无限级，如果为空(不传)或[]，默认为3个级别，名称为['一级选项','二级选项','三级选项']
         //参数6：是否开启全选模式，可以为空(不传)，默认为true
+        
         //data的格式为：包含每个level数组，即data.push(level_arr)；如果想用本插件，但是数据格式不一致的，可以自己写js转换下就行了
-        //cascadebox最终选中值：以父级为优先，即如果一个项，如果它有子级，并且子级全选了，那么最终显示选中值为该项。如果子级不全选，则只显示选中的子级
+        
+        //data节点配置说明：
+        //id:选项的id值
+        //name:选项显示名称
+        //parent_id:选项的父id，没有父选项或者顶级选项可以没有这个参数
+        //level:选项的等级，顶级选项的level为0
+        //no_checkbox:是否带复选框,true为不带，如果想默认带复选框，不带这个参数即可
+        
+        //cascadebox最终选中值：以父级为优先，即如果一个项，如果它有子级，并且子级全选了，那么最终显示选中值为该项。
+        //如果子级不全选，则只显示选中的子级。
+        //想要不以父级为优先，即父级节点的no_checkbox参数为true，不显示复选框即可
+        
         //获取选中的项：obj.get_data()方法
         //重新设置选中的项：obj.set_data(select_arr)方法
         //增加选中项：obj.add_val(id)方法
