@@ -121,8 +121,8 @@ _cascadebox.prototype = {
                     if(parentid){
                         $(".box li[v="+parentid+"]").find(':checkbox[value='+parentid+']').prop('checked',true);
                     }
-                    this_div.find(':checkbox').each(function () {
-                        var this_li = $(this).parent().parent();
+                    this_div.find('li').each(function () {
+                        var this_li = $(this);
                         var has_children = this_li.attr('has_children');
                         var this_id = this_li.attr('v');
                         if(has_children){
@@ -136,8 +136,8 @@ _cascadebox.prototype = {
                     if(parentid){
                         $(".box li[v="+parentid+"]").find(':checkbox[value='+parentid+']').prop('checked',false);
                     }
-                    this_div.find(':checkbox').each(function () {
-                        var this_li = $(this).parent().parent();
+                    this_div.find('li').each(function () {
+                        var this_li = $(this);
                         var has_children = this_li.attr('has_children');
                         var this_id = this_li.attr('v');
                         if(has_children){
@@ -176,7 +176,7 @@ _cascadebox.prototype = {
         for(var i=0; i< this.old_selected.length; i++){
             $('.cascadebox').find(':checkbox[value='+this.old_selected[i]+']').trigger('click');
         }
-        $('li.selected').each(function () {
+        $('.cascadebox li.selected').each(function () {
             $(this).trigger('click');
         });
 
@@ -222,7 +222,9 @@ _cascadebox.prototype = {
             if(id == -1) return;//如果是全选选项，跳过
             var all_flag = parent_ul.find(':checked[value="-1"]').is(':checked');
             var parent_id = parent_ul.parent().attr('parent_id');
-            if(all_flag && parent_id != 0) return;//如果给box的全选被选中，则不显示，直接显示父级
+            var checkbox_input = $('.cascadebox li[v='+parent_id+']').find('input');
+
+            if(all_flag && parent_id != 0 && checkbox_input.length == 1) return;//如果给box的全选被选中，且父级有checkbox，则不显示，直接显示父级
 
             html += "<div><label>"+text+"</label><span v="+id+">x</span></div>";
         });
@@ -307,7 +309,7 @@ _cascadebox.prototype = {
         for(var i=0; i< select_data.length; i++){
             $('.cascadebox').find(':checkbox[value='+select_data[i]+']').trigger('click');
         }
-        $('li.selected').each(function () {
+        $('.cascadebox li.selected').each(function () {
             $(this).trigger('click');
         });
 
