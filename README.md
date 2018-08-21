@@ -1,5 +1,5 @@
 # cascadebox
-多级联动多选checkbox插件
+js多级联动多选checkbox插件
 ![image](https://github.com/ltxlong/cascadebox/blob/master/cascadebox%E6%88%AA%E5%9B%BE.png)
 
 # 使用说明
