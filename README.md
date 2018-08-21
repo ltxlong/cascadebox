@@ -19,6 +19,8 @@
 - 增加选中项：obj.add_val(id)方法
 - 删除选中项：obj.del_val(id)方法
 ```js
+var data = ["c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8", "c_9"];
+
 var obj = cascadeBox('cascadebox','checkboxname',data,[],[],true); //初始化插件，返回cascadeBox实例
 
 var select_data = obj.get_data();
