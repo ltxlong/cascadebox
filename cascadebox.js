@@ -116,35 +116,49 @@ _cascadebox.prototype = {
             var id = $(this).val();
 
             if(id == -1){
+                var this_div_parent_id = this_div.attr('parent_id');
                 if(flag){
-                    this_div.find(':checkbox').prop('checked',true);
-                    if(parentid){
-                        $(".box li[v="+parentid+"]").find(':checkbox[value='+parentid+']').prop('checked',true);
-                    }
-                    this_div.find('li').each(function () {
-                        var this_li = $(this);
-                        var has_children = this_li.attr('has_children');
-                        var this_id = this_li.attr('v');
-                        if(has_children){
-                            top_div.parent().find('div[parent_id='+this_id+']').find(':checkbox').prop('checked',false);//先全部取消
-                            top_div.parent().find('div[parent_id='+this_id+']').find(':checkbox[value="-1"]').trigger('click');
+                    if(this_div_parent_id == 0){
+                        $('.cascadebox').find(':checkbox').prop('checked',true);
+                    }else{
+                        this_div.find(':checkbox').prop('checked',true);
+                        if(parentid){
+                            $(".cascadebox li[v="+parentid+"]").find(':checkbox[value='+parentid+']').prop('checked',true);
                         }
-                    });
+                        this_div.find('li').each(function () {
+                            var this_li = $(this);
+                            var has_children = this_li.attr('has_children');
+                            var this_id = this_li.attr('v');
+
+                            if(has_children){
+                                var children_div = top_div.parent().find('div[parent_id='+this_id+']');
+                                children_div.find(':checkbox').prop('checked',false);//先全部取消
+                                children_div.find(':checkbox[value="-1"]').trigger('click');
+                            }
+                        });
+                    }
+
 
                 }else{
-                    this_div.find(':checkbox').prop('checked',false);
-                    if(parentid){
-                        $(".box li[v="+parentid+"]").find(':checkbox[value='+parentid+']').prop('checked',false);
-                    }
-                    this_div.find('li').each(function () {
-                        var this_li = $(this);
-                        var has_children = this_li.attr('has_children');
-                        var this_id = this_li.attr('v');
-                        if(has_children){
-                            top_div.parent().find('div[parent_id='+this_id+']').find(':checkbox').prop('checked',true);//先全部勾选
-                            top_div.parent().find('div[parent_id='+this_id+']').find(':checkbox[value="-1"]').trigger('click');
+                    if(this_div_parent_id == 0){
+                        $('.cascadebox').find(':checkbox').prop('checked',false);
+                    }else{
+                        this_div.find(':checkbox').prop('checked',false);
+                        if(parentid){
+                            $(".cascadebox li[v="+parentid+"]").find(':checkbox[value='+parentid+']').prop('checked',false);
                         }
-                    });
+                        this_div.find('li').each(function () {
+                            var this_li = $(this);
+                            var has_children = this_li.attr('has_children');
+                            var this_id = this_li.attr('v');
+                            if(has_children){
+                                var children_div = top_div.parent().find('div[parent_id='+this_id+']');
+                                children_div.find(':checkbox').prop('checked',true);//先全部勾选
+                                children_div.find(':checkbox[value="-1"]').trigger('click');
+                            }
+                        });
+                    }
+
                 }
             }else{
                 var has_children = $(this).parent().parent().attr('has_children');
@@ -265,7 +279,8 @@ _cascadebox.prototype = {
         }
     },
     change_all:function (top_div,parentid,id, op_flag) {
-        var parent_li = $(".box li[v="+parentid+"]");
+
+        var parent_li = $(".cascadebox li[v="+parentid+"]");
         var parent_top_div = parent_li.parent().parent();
         var parent_parentid = parent_top_div.attr('parent_id');
         if(op_flag){
