@@ -1,6 +1,6 @@
 {
     "name": "ltxlong/cascadebox",
-    "description": "Multi level multi select checkbox plug-in",
+    "description": "Multi level multi select checkbox plug-in (js多级联动多选checkbox插件)",
     "type": "js",
     "license": "Apache-2.0",
     "authors": [
