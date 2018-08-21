@@ -1,0 +1,34 @@
+/**
+ * Created by PhpStorm.
+ * User: longtaixuan
+ */
+/***************[cascade box]******************/
+.cascadebox{font-size: 14px;clear: both;background-color: #F8F9FA;box-shadow: 0 3px 3px rgba(57,73,103,.05) inset;text-align: left;width:800px;height: 300px;display: flex;display: -webkit-flex;}
+.cascadebox .cascadebox_list{height: 300px;border: 1px solid #ddd;width:600px;display: flex;display: -webkit-flex;}
+
+.cascadebox input[type=checkbox],.cascadebox em{
+    width: 18px;height: 18px;vertical-align: middle;margin: 0 !important;display: inline-block;
+}
+.cascadebox input[type=checkbox]:checked{
+    background-color: #709ee8;color: #ffffff;
+}
+.cascadebox .outer_box{flex:1;height: 100%;float: left;}
+.cascadebox .box{height: 270px;overflow: auto;}
+.cascadebox ul{margin: 0;padding: 0;}
+.cascadebox li{list-style-type:none;height: 30px;padding: 0 0 0 10px;cursor: pointer;}
+.cascadebox li:hover,.cascadebox .cur{background-color: #e8e8e8;}
+.cascadebox .selected{background-color:#709ee8;color: #ffffff;}
+.cascadebox .selected:hover{background-color: #ffffff;color:#709ee8;}
+.cascadebox .search{width: 98%;height:90%;border: none;}
+
+.cascadebox .hide,.cascadebox .hide2{display: none;}
+.cascadebox label{line-height: 30px;vertical-align: middle;margin:0 0 0 10px !important;cursor: pointer;}
+.cascadebox .children span:before{content: ">";display: block;float: right;padding-right: 12px;padding-top: 6px;}
+
+.cascadebox .cascadebox_header{position: relative;min-height: 60px;width:200px;max-height:300px;overflow-y:auto;}
+.cascadebox .cascadebox_header div,.cascadebox .cascadebox_header  a{display:block;float: left;padding:3px 10px;margin: 5px;}
+.cascadebox .cascadebox_header div span,.cascadebox .cascadebox_header  a{cursor: pointer;}
+.cascadebox .cascadebox_header div{background-color: #e8e8e8;border-radius: 5px;width: 150px;}
+.cascadebox .cascadebox_header div span{margin: 0 0 0 10px;font-size: 20px;float: right;}
+.cascadebox .cascadebox_header div span:hover{color: #709ee8;}
+.clear_header {color: #709ee8;width: 150px;text-align: center;}
