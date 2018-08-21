@@ -3,8 +3,9 @@
 ![image](https://github.com/ltxlong/cascadebox/blob/master/cascadebox%E6%88%AA%E5%9B%BE.png)
 
 # 使用说明
-- <div id='cascadebox'></div> //这个div的id随便取名
-
+```
+<div id='cascadebox'></div> //这个div的id随便取名
+```
 - 参数1：插入cascadebox的div的id；
 - 参数2：checkbox的name；
 - 参数3：cascadebox所有选择项的数据；
