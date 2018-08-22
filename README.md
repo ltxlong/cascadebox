@@ -12,6 +12,8 @@ js多级联动多选checkbox插件
 - 参数4：预设选中的数据，可以为空(不传)或[]；
 - 参数5：各级别名称，可以无限级，如果为空(不传)或[]，默认为3个级别，名称为['一级选项','二级选项','三级选项']
 - 参数6：是否开启全选模式，可以为空(不传)，默认为true
+- 参数7：是否开启选中颜色加深，可以为空(不传)，默认为true。注意，选项太多的时候，开启会导致卡顿
+
 - data的格式为：直接将每个节点push进去就行，即data.push(node_obj)；如果想用本插件，但是数据格式不一致的，可以自己写js转换下就行了
 
 - data节点参数说明：
@@ -34,8 +36,8 @@ js多级联动多选checkbox插件
 var pre_select_data = ["c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8", "c_9"];
 var cascadebox_header = [];
 //var cascadebox_header = ['省份','城市','区县'];
-//var obj = cascadeBox('cascadebox','checkboxname',data,[],[],true); //初始化插件，返回cascadeBox实例
-var obj = cascadeBox('cascadebox','checkboxname',data,pre_select_data,cascadebox_header,true);
+//var obj = cascadeBox('cascadebox','checkboxname',data); //初始化插件，返回cascadeBox实例
+var obj = cascadeBox('cascadebox','checkboxname',data,pre_select_data,cascadebox_header,true,true);
 
 var select_data = obj.get_data();
 ```
