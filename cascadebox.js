@@ -320,8 +320,8 @@ _cascadebox.prototype = {
 
 
         //选中背景加深
-        if(selected_highlight_flag){
-            //注意：如果选项数据太多，以下两句代码会导致很卡！
+        if(this.selected_highlight_flag){
+            //注意：如果选项数据很多，以下两句代码会导致很卡！
             $("#"+this.dom_id+" .selected").removeClass('selected');
 
             $("#"+this.dom_id+" input:checked").each(function(){
