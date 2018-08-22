@@ -332,7 +332,7 @@ _cascadebox.prototype = {
         if(this.selected_highlight_flag){
             //注意：如果选项数据很多，以下两句代码会导致很卡！
             $("#"+this.dom_id+" .selected").removeClass('selected');
-
+            var that = this;
             $("#"+this.dom_id+" input:checked").each(function(){
                 that.selected($(this).parent().parent());
             });
