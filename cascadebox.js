@@ -86,7 +86,7 @@ _cascadebox.prototype = {
 
             }
             var _class = 'outer_box';
-            if(parent_id === '0'){
+            if(parent_id == 0){
                 _class += " root";
             }else{
                 _class += " hide";
