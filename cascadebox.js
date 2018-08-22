@@ -24,6 +24,7 @@ _cascadebox.prototype = {
         this.selected_highlight_flag = selected_highlight_flag;
     },
     makeHtml:function(){
+        var this_dom_id = this.dom_id;
         var _data = {};
         for(var i in this.data){
             var d = this.data[i];
@@ -102,14 +103,14 @@ _cascadebox.prototype = {
 
         html = "<div class='cascadebox_list'>"+html+"</div><div class='cascadebox_header' style='float: left;'></div>";
 
-        $("#"+this.dom_id).addClass('cascadebox').html(html);
-        this.width = $("#"+this.dom_id).width();
+        $("#"+this_dom_id).addClass('cascadebox').html(html);
+        this.width = $("#"+this_dom_id).width();
         this.setWidth();
         var that = this;
-        $("#"+this.dom_id+" .children").on('click',function(){
+        $("#"+this_dom_id+" .children").on('click',function(){
             that.showChildren(this);
         });
-        $("#"+this.dom_id+" :checkbox").on('change',function(){
+        $("#"+this_dom_id+" input[type=checkbox]").on('change',function(){
             var flag = $(this).is(':checked');
             var this_div = $(this).parent().parent().parent().parent();
             var top_div = this_div.parent();
@@ -119,11 +120,11 @@ _cascadebox.prototype = {
             if(id == -1){
                 if(flag){
                     if(parentid == 0){
-                        $('.cascadebox').find(':checkbox').prop('checked',true);
+                        $('#'+this_dom_id+'.cascadebox').find('input[type=checkbox]').prop('checked',true);
                     }else{
-                        this_div.find(':checkbox').prop('checked',true);
+                        this_div.find('input[type=checkbox]').prop('checked',true);
                         if(parentid){
-                            $(".cascadebox li[v="+parentid+"]").find(':checkbox[value='+parentid+']').prop('checked',true);
+                            $("#"+this_dom_id+".cascadebox li[v="+parentid+"]").find('input[type=checkbox][value='+parentid+']').prop('checked',true);
                         }
                         this_div.find('li').each(function () {
                             var this_li = $(this);
@@ -132,8 +133,8 @@ _cascadebox.prototype = {
 
                             if(has_children){
                                 var children_div = top_div.parent().find('div[parent_id='+this_id+']');
-                                children_div.find(':checkbox').prop('checked',false);//先全部取消
-                                children_div.find(':checkbox[value="-1"]').trigger('click');
+                                children_div.find('input[type=checkbox]').prop('checked',false);//先全部取消
+                                children_div.find('input[type=checkbox][value="-1"]').trigger('click');
                             }
                         });
                     }
@@ -141,11 +142,11 @@ _cascadebox.prototype = {
 
                 }else{
                     if(parentid == 0){
-                        $('.cascadebox').find(':checkbox').prop('checked',false);
+                        $('#'+this_dom_id+'.cascadebox').find('input[type=checkbox]').prop('checked',false);
                     }else{
-                        this_div.find(':checkbox').prop('checked',false);
+                        this_div.find('input[type=checkbox]').prop('checked',false);
                         if(parentid){
-                            $(".cascadebox li[v="+parentid+"]").find(':checkbox[value='+parentid+']').prop('checked',false);
+                            $("#"+this_dom_id+".cascadebox li[v="+parentid+"]").find('input[type=checkbox][value='+parentid+']').prop('checked',false);
                         }
                         this_div.find('li').each(function () {
                             var this_li = $(this);
@@ -153,8 +154,8 @@ _cascadebox.prototype = {
                             var this_id = this_li.attr('v');
                             if(has_children){
                                 var children_div = top_div.parent().find('div[parent_id='+this_id+']');
-                                children_div.find(':checkbox').prop('checked',true);//先全部勾选
-                                children_div.find(':checkbox[value="-1"]').trigger('click');
+                                children_div.find('input[type=checkbox]').prop('checked',true);//先全部勾选
+                                children_div.find('input[type=checkbox][value="-1"]').trigger('click');
                             }
                         });
                     }
@@ -163,7 +164,7 @@ _cascadebox.prototype = {
             }else{
                 var has_children = $(this).parent().parent().attr('has_children');
                 if(has_children == 1){
-                    var children_all_checkbox  =  top_div.parent().find('div[parent_id='+id+']').find(':checkbox[value="-1"]');
+                    var children_all_checkbox  =  top_div.parent().find('div[parent_id='+id+']').find('input[type=checkbox][value="-1"]');
                     children_all_checkbox.trigger('click');
                 }else{
                     if(parentid == 0){
@@ -181,10 +182,17 @@ _cascadebox.prototype = {
 
             if(firstbox_nochildren_op){
                 if(flag){
+                    var this_all_flag = true;
+                    this_div.find('input[type=checkbox]').each(function () {
+                        if($(this).val() == -1) return;
+                        if(!$(this).is(':checked')) this_all_flag = false;
+                    });
+                    if(this_all_flag) this_div.find('input[type=checkbox][value="-1"]').prop('checked',true);
                     var text = $(this).parent().next('label').html();
-                    $('.cascadebox_header').append("<div><label>"+text+"</label><span v="+id+">x</span></div>");
+                    $('#'+this_dom_id+' .cascadebox_header').append("<div><label>"+text+"</label><span v="+id+">x</span></div>");
                 }else{
-                    $('.cascadebox_header').find('span[v='+id+']').parent().remove();
+                    this_div.find('input[type=checkbox][value="-1"]').prop('checked',false);
+                    $('#'+this_dom_id+' .cascadebox_header').find('span[v='+id+']').parent().remove();
                 }
 
             }else{
@@ -210,9 +218,9 @@ _cascadebox.prototype = {
 
         //显示预设数据
         for(var i=0; i< this.old_selected.length; i++){
-            $('.cascadebox').find(':checkbox[value='+this.old_selected[i]+']').trigger('click');
+            $("#"+this_dom_id+".cascadebox").find('input[type=checkbox][value='+this.old_selected[i]+']').trigger('click');
         }
-        $('.cascadebox li.selected').each(function () {
+        $('#'+this_dom_id+'.cascadebox li.selected').each(function () {
             $(this).trigger('click');
         });
 
@@ -224,6 +232,7 @@ _cascadebox.prototype = {
         objs.width(w-10);
     },
     showChildren:function(e){
+        var this_dom_id = this.dom_id;
         var li = $(e);
         li.parent().find('.cur').removeClass('cur');
         li.addClass('cur');
@@ -236,21 +245,22 @@ _cascadebox.prototype = {
         var _col = col;
         while(1){
             _col++;
-            var o = $("#"+this.dom_id+" div[col="+_col+"]");
+            var o = $("#"+this_dom_id+" div[col="+_col+"]");
             if(o.length > 0){
                 o.hide();
             }else{
                 break;
             }
         }
-        $("#"+this.dom_id+" div[outer_parent_id="+id+"]").attr('col',col*1+1).removeClass('hide').show();
-        $("#"+this.dom_id+" div[parent_id="+id+"]").attr('col',col*1+1).removeClass('hide').show();
+        $("#"+this_dom_id+" div[outer_parent_id="+id+"]").attr('col',col*1+1).removeClass('hide').show();
+        $("#"+this_dom_id+" div[parent_id="+id+"]").attr('col',col*1+1).removeClass('hide').show();
         this.setWidth();
     },
     showChecked:function(){
+        var this_dom_id = this.dom_id;
         var html = '<a class="clear_header">清空全部已选</a>';
-        var top_box = $("#"+this.dom_id).find('div[parent_id=0]');
-        var top_box_all_flag = top_box.find(':checked[value="-1"]').is(':checked');
+        var top_box = $("#"+this_dom_id).find('div[parent_id=0]');
+        var top_box_all_flag = top_box.find('input[type=checkbox][value="-1"]').is(':checked');
         var all_select_first_box = false;
         if(top_box_all_flag){
             //如果顶级选项全新，并且所有选项都有复选框，那么直接显示所有顶级选项
@@ -278,15 +288,15 @@ _cascadebox.prototype = {
 
         if(!all_select_first_box){
             html = '<a class="clear_header">清空全部已选</a>';
-            $("#"+this.dom_id+" input:checked").not('.hide2 input:checked').each(function(i,e){
+            $("#"+this_dom_id+" input:checked").not('.hide2 input:checked').each(function(i,e){
                 var obj = $(this);
                 var parent_ul = obj.parent().parent().parent();
                 var text = obj.parent().next('label').html();
                 var id = obj.val();
                 if(id == -1) return;//如果是全选选项，跳过
-                var all_flag = parent_ul.find(':checked[value="-1"]').is(':checked');
+                var all_flag = parent_ul.find('input[type=checkbox][value="-1"]').is(':checked');
                 var parent_id = parent_ul.parent().attr('parent_id');
-                var checkbox_input = $('.cascadebox li[v='+parent_id+']').find('input');
+                var checkbox_input = $('#'+this_dom_id+'.cascadebox li[v='+parent_id+']').find('input');
 
                 if(all_flag && parent_id != 0 && checkbox_input.length == 1) return;//如果给box的全选被选中，且父级有checkbox，则不显示，直接显示父级
 
@@ -296,8 +306,8 @@ _cascadebox.prototype = {
         }
 
 
-        $("#"+this.dom_id+" .cascadebox_header").html(html);
-        $("#"+this.dom_id+" .cascadebox_header span").on('click',function(){
+        $("#"+this_dom_id+" .cascadebox_header").html(html);
+        $("#"+this_dom_id+" .cascadebox_header span").on('click',function(){
             var obj = $(this);
             var id = obj.attr('v');
             var span_div = obj.parent();
@@ -305,17 +315,16 @@ _cascadebox.prototype = {
             if(header_div.find('div').length < 2){
                 header_div.find('a').remove();
             }
-            header_div.prev(".cascadebox_list").find(':checkbox[value='+id+']').trigger('click');
+            header_div.prev(".cascadebox_list").find('input[type=checkbox][value='+id+']').trigger('click');
             span_div.remove();
         });
 
-        var that = this;
-        $("#"+this.dom_id+" .cascadebox_header a").on('click',function(){
+        $("#"+this_dom_id+" .cascadebox_header a").on('click',function(){
             var obj = $(this);
             var span_div = obj.parent();
-            span_div.prev('.cascadebox_list').find(':checkbox').prop('checked',false);
+            span_div.prev('.cascadebox_list').find('input[type=checkbox]').prop('checked',false);
             span_div.html('');
-            $("#"+that.dom_id+" .selected").removeClass('selected');
+            $("#"+this_dom_id+" .selected").removeClass('selected');
         });
 
 
@@ -341,12 +350,12 @@ _cascadebox.prototype = {
     },
     change_all:function (top_div,parentid,id, op_flag) {
 
-        var parent_li = $(".cascadebox li[v="+parentid+"]");
+        var parent_li = $("#"+this.dom_id+".cascadebox li[v="+parentid+"]");
         var parent_top_div = parent_li.parent().parent();
         var parent_parentid = parent_top_div.attr('parent_id');
         if(op_flag){
             var all_flag = true;
-            top_div.find(':checkbox').each(function () {
+            top_div.find('input[type=checkbox]').each(function () {
                 if($(this).val() != -1){
                     if(!$(this).is(':checked')){
                         all_flag = false;
@@ -356,13 +365,13 @@ _cascadebox.prototype = {
             });
 
             if(all_flag){
-                top_div.find(':checkbox[value="-1"]').prop('checked',true);
-                parent_li.find(':checkbox[value='+parentid+']').prop('checked',true);
+                top_div.find('input[type=checkbox][value="-1"]').prop('checked',true);
+                parent_li.find('input[type=checkbox][value='+parentid+']').prop('checked',true);
             }
         }else{
-            top_div.find(':checkbox[value="-1"]').prop('checked',false);
-            parent_li.find(':checkbox[value='+parentid+']').prop('checked',false);
-            parent_li.parent().find(':checkbox[value="-1"]').prop('checked',false);
+            top_div.find('input[type=checkbox][value="-1"]').prop('checked',false);
+            parent_li.find('input[type=checkbox][value='+parentid+']').prop('checked',false);
+            parent_li.parent().find('input[type=checkbox][value="-1"]').prop('checked',false);
 
         }
         if(parentid !== 0 && parentid !== undefined){
@@ -378,23 +387,24 @@ _cascadebox.prototype = {
         return get_data;
     },
     set_data:function (select_data) {
+        var this_dom_id = this.dom_id;
         //先清空数据
-        $('.clear_header').trigger('click');
+        $('#'+this_dom_id+'.clear_header').trigger('click');
 
         //显示设置数据
         for(var i=0; i< select_data.length; i++){
-            $('.cascadebox').find(':checkbox[value='+select_data[i]+']').trigger('click');
+            $('#'+this_dom_id+'.cascadebox').find('input[type=checkbox][value='+select_data[i]+']').trigger('click');
         }
-        $('.cascadebox li.selected').each(function () {
+        $('#'+this_dom_id+'.cascadebox li.selected').each(function () {
             $(this).trigger('click');
         });
 
     },
     add_val:function (val) {
-        $('.cascadebox').find(':checkbox[value='+val+']').trigger('click');
+        $('#'+this.dom_id+'.cascadebox').find('input[type=checkbox][value='+val+']').trigger('click');
     },
     del_val:function (val) {
-        $('.cascadebox_header').find('span[v='+val+']').trigger('click');
+        $('#'+this.dom_id+' .cascadebox_header').find('span[v='+val+']').trigger('click');
     }
 };
 
