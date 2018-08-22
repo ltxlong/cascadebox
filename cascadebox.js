@@ -13,13 +13,15 @@ _cascadebox.prototype = {
     width:0,
     header_data:null,
     all_flag:null,
-    init:function(dom_id,name,data,selected = [],header_data = ['一级选项','二级选项','三级选项'],all_flag = true){
+    selected_highlight_flag:null,
+    init:function(dom_id,name,data,selected = [],header_data = ['一级选项','二级选项','三级选项'],all_flag = true,selected_highlight_flag = true){
         this.dom_id = dom_id;
         this.name = name;
         this.data = data;
         this.old_selected = selected;
         this.header_data = header_data.length == 0 ? ['一级选项','二级选项','三级选项'] : header_data;
         this.all_flag = all_flag;
+        this.selected_highlight_flag = selected_highlight_flag;
     },
     makeHtml:function(){
         var _data = {};
@@ -318,12 +320,15 @@ _cascadebox.prototype = {
 
 
         //选中背景加深
-        //注意：如果选项数据很多，以下两句代码会导致很卡！请注释掉，不要选中背景加深了！
-        $("#"+this.dom_id+" .selected").removeClass('selected');
+        if(selected_highlight_flag){
+            //注意：如果选项数据太多，以下两句代码会导致很卡！
+            $("#"+this.dom_id+" .selected").removeClass('selected');
 
-        $("#"+this.dom_id+" input:checked").each(function(){
-            that.selected($(this).parent().parent());
-        });
+            $("#"+this.dom_id+" input:checked").each(function(){
+                that.selected($(this).parent().parent());
+            });
+        }
+
 
     },
     selected:function(obj){
@@ -401,11 +406,12 @@ _cascadebox.prototype = {
  * @param selected [预设选中的数据，可以为空(不传)或[]]
  * @param header_data [各级别名称，可以无限级，如果为空(不传)或[]，默认为3个级别，默认名称为['一级选项','二级选项','三级选项']]
  * @param all_flag [是否开启全选模式，可以为空(不传)，默认为true]
+ * @param selected_highlight_flag [是否开启选中颜色加深，可以为空(不传)，默认为true。注意，选项太多的时候，开启会导致卡顿]
  * @returns {_cascadebox} [返回cascadeBox实例]
  */
-function cascadeBox(id, name, data, selected, header_data, all_flag){
+function cascadeBox(id, name, data, selected, header_data, all_flag, selected_highlight_flag){
     var obj = new _cascadebox();
-    obj.init(id, name, data, selected, header_data, all_flag);
+    obj.init(id, name, data, selected, header_data, all_flag, selected_highlight_flag);
     obj.makeHtml();
     return obj;
 }
