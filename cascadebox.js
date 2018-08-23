@@ -26,6 +26,7 @@ _cascadebox.prototype = {
     makeHtml:function(){
         var this_dom_id = this.dom_id;
         var _data = {};
+        var _key_to_value = {};
         for(var i in this.data){
             var d = this.data[i];
             if(!d.hasOwnProperty('parent_id')){
@@ -95,10 +96,14 @@ _cascadebox.prototype = {
             if(_class){
                 _class = " class='"+_class+"'";
             }
+            
+            var box_header_label = this.header_data[_data[parent_id][1]['level']] || _key_to_value[parent_id];
 
-            html_list = "<div outer_parent_id="+parent_id+_class+"><div style='text-align: center;height: 30px;border-right: 1px solid #e8e8e8;'><label>"+this.header_data[_data[parent_id][1]['level']]+"</label></div><div parent_id="+parent_id+" class='box' ><ul>"+html_list+"</ul></div></div>";
+            html_list = "<div outer_parent_id="+parent_id+_class+"><div style='text-align: center;height: 30px;border-right: 1px solid #e8e8e8;'><label>"+box_header_label+"</label></div><div parent_id="+parent_id+" class='box' ><ul>"+html_list+"</ul></div></div>";
 
             html += html_list;
+            
+            _key_to_value.length = 0;
         }
 
         html = "<div class='cascadebox_list col-sm-9' style='padding: 0;'>"+html+"</div><div class='cascadebox_header col-sm-3' style='float: left;'></div>";
