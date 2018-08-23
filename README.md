@@ -42,6 +42,13 @@ var obj = cascadeBox('cascadebox','checkboxname',data,pre_select_data,cascadebox
 var select_data = obj.get_data();
 ```
 
+结合bootstrap，拥抱响应式：
+![image](https://github.com/ltxlong/cascadebox/blob/master/%E7%BB%93%E5%90%88bootstrap1.png)
+![image](https://github.com/ltxlong/cascadebox/blob/master/%E7%BB%93%E5%90%88bootstrap2.png)
+![image](https://github.com/ltxlong/cascadebox/blob/master/%E7%BB%93%E5%90%88bootstrap3.png)
+![image](https://github.com/ltxlong/cascadebox/blob/master/%E7%BB%93%E5%90%88bootstrap4.png)
+
+
 本插件开发源于业务上要移植今日头条的广告页面，要用到这一功能。
 
 # 感谢 
