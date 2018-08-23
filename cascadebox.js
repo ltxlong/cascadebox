@@ -29,6 +29,7 @@ _cascadebox.prototype = {
         var _key_to_value = {};
         for(var i in this.data){
             var d = this.data[i];
+            _key_to_value[d.id] = d.name;
             if(!d.hasOwnProperty('parent_id')){
                 d.parent_id = 0;
             }
@@ -37,7 +38,9 @@ _cascadebox.prototype = {
             }else{
                 _data[d.parent_id].push(d);
             }
+
         }
+
         var html= "";
         //console.log(_data);
         for(var parent_id in _data){
@@ -96,17 +99,21 @@ _cascadebox.prototype = {
             if(_class){
                 _class = " class='"+_class+"'";
             }
-            
-            var box_header_label = this.header_data[_data[parent_id][1]['level']] || _key_to_value[parent_id];
 
-            html_list = "<div outer_parent_id="+parent_id+_class+"><div style='text-align: center;height: 30px;border-right: 1px solid #e8e8e8;'><label>"+box_header_label+"</label></div><div parent_id="+parent_id+" class='box' ><ul>"+html_list+"</ul></div></div>";
+            if(this.all_flag){
+                var box_header_label = this.header_data[_data[parent_id][1]['level']] || _key_to_value[parent_id];
+            }else{
+                var box_header_label = this.header_data[_data[parent_id][0]['level']] || _key_to_value[parent_id];
+            }
+
+            html_list = "<div outer_parent_id="+parent_id+_class+"><div style='text-align: center;height: 30px;border-right: 1px solid #e8e8e8;'><label >"+box_header_label+"</label></div><div parent_id="+parent_id+" class='box' ><ul>"+html_list+"</ul></div></div>";
 
             html += html_list;
-            
+
             _key_to_value.length = 0;
         }
 
-        html = "<div class='cascadebox_list col-sm-9' style='padding: 0;'>"+html+"</div><div class='cascadebox_header col-sm-3' style='float: left;'></div>";
+        html = "<div class='cascadebox_list'>"+html+"</div><div class='cascadebox_header' style='float: left;'></div>";
 
         $("#"+this_dom_id).addClass('cascadebox').html(html);
         this.width = $("#"+this_dom_id).width();
@@ -358,22 +365,49 @@ _cascadebox.prototype = {
         var parent_li = $("#"+this.dom_id+".cascadebox li[v="+parentid+"]");
         var parent_top_div = parent_li.parent().parent();
         var parent_parentid = parent_top_div.attr('parent_id');
+
         if(op_flag){
-            var all_flag = true;
+            var top_div_checkbox_num = 0;
+            var top_all_flag = true;
             top_div.find('input[type=checkbox]').each(function () {
                 if($(this).val() != -1){
+                    top_div_checkbox_num++;
                     if(!$(this).is(':checked')){
-                        all_flag = false;
+                        top_all_flag = false;
                     }
                 }
 
             });
 
-            if(all_flag){
+            if(this.all_flag){
+                var top_div_li_num = top_div.find('li').length - 2;
+            }else{
+                var top_div_li_num = top_div.find('li').length - 1;
+            }
+
+            var top_div_no_checkbox_num = top_div_li_num - top_div_checkbox_num;
+            if(top_div_no_checkbox_num > 0){
+                var children_select_all_li_num = 0;
+                top_div.find('li').each(function () {
+                    if($(this).attr('class') != undefined){
+                        if($(this).attr('class').indexOf('children_select_all') != -1)
+                            children_select_all_li_num++;
+
+                    }
+                });
+                if(top_div_no_checkbox_num != children_select_all_li_num){
+                    top_all_flag = false;
+                }
+            }
+
+            if(top_all_flag){
                 top_div.find('input[type=checkbox][value="-1"]').prop('checked',true);
                 parent_li.find('input[type=checkbox][value='+parentid+']').prop('checked',true);
+                parent_li.addClass('children_select_all');
             }
         }else{
+
+            parent_li.removeClass('children_select_all');
             top_div.find('input[type=checkbox][value="-1"]').prop('checked',false);
             parent_li.find('input[type=checkbox][value='+parentid+']').prop('checked',false);
             parent_li.parent().find('input[type=checkbox][value="-1"]').prop('checked',false);
