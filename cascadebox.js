@@ -58,7 +58,7 @@ _cascadebox.prototype = {
                 var item = list[j];
                 var _class = "";
                 if(typeof(_data[item.id]) == 'object'){
-                    _class += " children";
+                    _class += " children children_select_all";
                 }
                 try{
                     if(item.is_hidden){
