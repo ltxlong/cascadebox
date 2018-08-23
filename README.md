@@ -36,7 +36,8 @@ js多级联动多选checkbox插件
 var pre_select_data = ["c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8", "c_9"];
 var cascadebox_header = [];
 //var cascadebox_header = ['省份','城市','区县'];
-//如果想某一级别的cascadebox_header显示父级的名称，那么只要传参为''即可。如想要城市级别显示父级名称，只要传参为['省份','','区县']
+//如果想某一级别的cascadebox_header显示父级的名称，那么只要传参为''即可。
+//例如想要城市级别的cascadebox_header动态显示父级名称，即传参应为['省份','','区县']。
 //var obj = cascadeBox('cascadebox','checkboxname',data); //初始化插件，返回cascadeBox实例
 var obj = cascadeBox('cascadebox','checkboxname',data,pre_select_data,cascadebox_header,true,true);
 
