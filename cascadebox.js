@@ -113,7 +113,7 @@ _cascadebox.prototype = {
             _key_to_value.length = 0;
         }
 
-        html = "<div class='cascadebox_list'>"+html+"</div><div class='cascadebox_header' style='float: left;'></div>";
+        html = "<div class='cascadebox_list col-sm-9' style='padding: 0;'>"+html+"</div><div class='cascadebox_header col-sm-3' style='float: left;'></div>";
 
         $("#"+this_dom_id).addClass('cascadebox').html(html);
         this.width = $("#"+this_dom_id).width();
