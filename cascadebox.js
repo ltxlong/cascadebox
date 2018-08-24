@@ -58,7 +58,7 @@ _cascadebox.prototype = {
                 var item = list[j];
                 var _class = "";
                 if(typeof(_data[item.id]) == 'object'){
-                    _class += " children children_select_all";
+                    _class += " children";
                 }
                 try{
                     if(item.is_hidden){
@@ -84,7 +84,7 @@ _cascadebox.prototype = {
 
                 }
                 if(_class.indexOf("children") != -1){
-                    html_list += "<li"+_class+" v="+item.id+" has_children = 1><em>"+box+"</em><label>"+item.name+"</label><span></span></li>";
+                    html_list += "<li"+_class+" v="+item.id+" has_children = 1 children_select_all = 0><em>"+box+"</em><label>"+item.name+"</label><span></span></li>";
                 }else{
                     html_list += "<li"+_class+" v="+item.id+" has_children = 0><em>"+box+"</em><label>"+item.name+"</label><span></span></li>";
                 }
@@ -144,7 +144,7 @@ _cascadebox.prototype = {
                             var this_id = this_li.attr('v');
 
                             if(has_children){
-                                var children_div = top_div.parent().find('div[parent_id='+this_id+']');
+                                var children_div = top_div.parent().find('div[parent_id="'+this_id+'"]');
                                 children_div.find('input[type=checkbox]').prop('checked',false);//先全部取消
                                 children_div.find('input[type=checkbox][value="-1"]').trigger('click');
                             }
@@ -165,7 +165,7 @@ _cascadebox.prototype = {
                             var has_children = this_li.attr('has_children');
                             var this_id = this_li.attr('v');
                             if(has_children){
-                                var children_div = top_div.parent().find('div[parent_id='+this_id+']');
+                                var children_div = top_div.parent().find('div[parent_id="'+this_id+'"]');
                                 children_div.find('input[type=checkbox]').prop('checked',true);//先全部勾选
                                 children_div.find('input[type=checkbox][value="-1"]').trigger('click');
                             }
@@ -367,11 +367,9 @@ _cascadebox.prototype = {
         var parent_parentid = parent_top_div.attr('parent_id');
 
         if(op_flag){
-            var top_div_checkbox_num = 0;
             var top_all_flag = true;
             top_div.find('input[type=checkbox]').each(function () {
                 if($(this).val() != -1){
-                    top_div_checkbox_num++;
                     if(!$(this).is(':checked')){
                         top_all_flag = false;
                     }
@@ -379,37 +377,25 @@ _cascadebox.prototype = {
 
             });
 
-            if(this.all_flag){
-                var top_div_li_num = top_div.find('li').length - 2;
-            }else{
-                var top_div_li_num = top_div.find('li').length - 1;
-            }
-
-            var top_div_no_checkbox_num = top_div_li_num - top_div_checkbox_num;
-            if(top_div_no_checkbox_num > 0){
-                var children_select_all_li_num = 0;
-                top_div.find('li').each(function () {
-                    if($(this).attr('class') != undefined){
-                        if($(this).attr('class').indexOf('children_select_all') != -1)
-                            children_select_all_li_num++;
-
-                    }
-                });
-                if(top_div_no_checkbox_num != children_select_all_li_num){
-                    top_all_flag = false;
-                }
-            }
+            top_div.find('li').each(function () {
+                if($(this).attr('has_children') != undefined)
+                    if($(this).attr('children_select_all') == 0)
+                        top_all_flag = false;
+            });
 
             if(top_all_flag){
                 top_div.find('input[type=checkbox][value="-1"]').prop('checked',true);
                 parent_li.find('input[type=checkbox][value='+parentid+']').prop('checked',true);
-                parent_li.addClass('children_select_all');
+                if(parent_li.attr('children_select_all') != undefined)
+                    parent_li.attr('children_select_all',1);
             }else{
-                parent_li.removeClass('children_select_all');
+                if(parent_li.attr('children_select_all') != undefined)
+                    parent_li.attr('children_select_all',0);
             }
         }else{
 
-            parent_li.removeClass('children_select_all');
+            if(parent_li.attr('children_select_all') != undefined)
+                parent_li.attr('children_select_all',0);
             top_div.find('input[type=checkbox][value="-1"]').prop('checked',false);
             parent_li.find('input[type=checkbox][value='+parentid+']').prop('checked',false);
             parent_li.parent().find('input[type=checkbox][value="-1"]').prop('checked',false);
