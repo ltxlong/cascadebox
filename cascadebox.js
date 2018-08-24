@@ -42,7 +42,7 @@ _cascadebox.prototype = {
         }
 
         var html= "";
-        //console.log(_data);
+        console.log(_data);
         for(var parent_id in _data){
             if(this.all_flag){
                 //all_flag是否增加全选
@@ -195,7 +195,7 @@ _cascadebox.prototype = {
             if(firstbox_nochildren_op){
                 if(flag){
                     if(that.selected_highlight_flag) $(this).parent().parent().addClass('selected');
-                    
+
                     var this_all_flag = true;
                     this_div.find('input[type=checkbox]').each(function () {
                         if($(this).val() == -1) return;
@@ -203,10 +203,35 @@ _cascadebox.prototype = {
                     });
                     if(this_all_flag) this_div.find('input[type=checkbox][value="-1"]').prop('checked',true);
                     var text = $(this).parent().next('label').html();
+
+                    if($("#"+this_dom_id+" .cascadebox_header a").length == 0){
+                        $('#'+this_dom_id+' .cascadebox_header').append('<a class="clear_header">清空全部已选</a>');
+                    }
+                    
                     $('#'+this_dom_id+' .cascadebox_header').append("<div><label>"+text+"</label><span v="+id+">x</span></div>");
+
+                    $("#"+this_dom_id+" .cascadebox_header span").on('click',function(){
+                        var obj = $(this);
+                        var id = obj.attr('v');
+                        var span_div = obj.parent();
+                        var header_div = span_div.parent();
+                        if(header_div.find('div').length < 2){
+                            header_div.find('a').remove();
+                        }
+                        header_div.prev(".cascadebox_list").find('input[type=checkbox][value='+id+']').trigger('click');
+                        span_div.remove();
+                    });
+
+                    $("#"+this_dom_id+" .cascadebox_header a").on('click',function(){
+                        var obj = $(this);
+                        var span_div = obj.parent();
+                        span_div.prev('.cascadebox_list').find('input[type=checkbox]').prop('checked',false);
+                        span_div.html('');
+                        $("#"+this_dom_id+" .selected").removeClass('selected');
+                    });
                 }else{
                     if(that.selected_highlight_flag) $(this).parent().parent().removeClass('selected');
-                    
+
                     this_div.find('input[type=checkbox][value="-1"]').prop('checked',false);
                     $('#'+this_dom_id+' .cascadebox_header').find('span[v='+id+']').parent().remove();
                 }
