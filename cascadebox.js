@@ -42,7 +42,7 @@ _cascadebox.prototype = {
         }
 
         var html= "";
-        console.log(_data);
+        //console.log(_data);
         for(var parent_id in _data){
             if(this.all_flag){
                 //all_flag是否增加全选
