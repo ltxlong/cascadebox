@@ -404,6 +404,8 @@ _cascadebox.prototype = {
                 top_div.find('input[type=checkbox][value="-1"]').prop('checked',true);
                 parent_li.find('input[type=checkbox][value='+parentid+']').prop('checked',true);
                 parent_li.addClass('children_select_all');
+            }else{
+                parent_li.removeClass('children_select_all');
             }
         }else{
 
