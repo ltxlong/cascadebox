@@ -30,7 +30,7 @@ _cascadebox.prototype = {
         for(var i in this.data){
             var d = this.data[i];
             _key_to_value[d.id] = d.name;
-            if(!d.hasOwnProperty('parent_id')){
+            if(!d.hasOwnProperty('parent_id') || d.parent_id == undefined){
                 d.parent_id = 0;
             }
             if(typeof(_data[d.parent_id]) != 'object'){
