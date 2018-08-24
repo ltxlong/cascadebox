@@ -194,6 +194,8 @@ _cascadebox.prototype = {
 
             if(firstbox_nochildren_op){
                 if(flag){
+                    if(that.selected_highlight_flag) $(this).parent().parent().addClass('selected');
+                    
                     var this_all_flag = true;
                     this_div.find('input[type=checkbox]').each(function () {
                         if($(this).val() == -1) return;
@@ -203,6 +205,8 @@ _cascadebox.prototype = {
                     var text = $(this).parent().next('label').html();
                     $('#'+this_dom_id+' .cascadebox_header').append("<div><label>"+text+"</label><span v="+id+">x</span></div>");
                 }else{
+                    if(that.selected_highlight_flag) $(this).parent().parent().removeClass('selected');
+                    
                     this_div.find('input[type=checkbox][value="-1"]').prop('checked',false);
                     $('#'+this_dom_id+' .cascadebox_header').find('span[v='+id+']').parent().remove();
                 }
