@@ -461,6 +461,37 @@ _cascadebox.prototype = {
     },
     del_val:function (val) {
         $('#'+this.dom_id+' .cascadebox_header').find('span[v='+val+']').trigger('click');
+    },
+    show_item:function (val){
+        var the_show_item = $('#'+this.dom_id+'.cascadebox li[v='+val+']');
+        the_show_item.show();
+    },
+    hide_item:function (val) {
+        var the_hide_item = $('#'+this.dom_id+'.cascadebox li[v='+val+']');
+        if(the_hide_item.is(':checked')) the_hide_item.trigger('click');
+        the_hide_item.hide();
+        if(the_hide_item.attr('has_children') == 1)
+            this.hide_all_children(val);
+    },
+    hide_all_children:function (val) {
+        var child_div = $('#'+this.dom_id+'.cascadebox div[parent_id='+val+']');
+        var outer_child_top_div = child_div.parent();
+        outer_child_top_div.hide();
+        var that = this;
+        var the_all_checkbox = child_div.find('input[type=checkbox][value="-1"]');
+        var the_all_check_flag = the_all_checkbox.is(':checked');
+        if(the_all_check_flag){
+            the_all_checkbox.trigger('click');
+        }else{
+            child_div.find('input[type=checkbox]:checked').trigger('click');
+        }
+        child_div.find('input[type=checkbox]').each(function () {
+            var this_li = $(this).parent().parent();
+            if(this_li.attr('has_children') == 1){
+                that.hide_all_children(this_li.attr('v'));
+            }
+
+        });
     }
 };
 
