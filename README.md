@@ -32,6 +32,8 @@ js多级联动多选checkbox插件
 - 重新设置选中的项：obj.set_data(select_arr)方法
 - 增加选中项：obj.add_val(id)方法
 - 删除选中项：obj.del_val(id)方法
+- 显示某选项(包括其所有子选项)：obj.show_item(id)方法
+- 隐藏某选项(包括其所有子选项)：obj.hide_item(id)方法
 ```js
 var pre_select_data = ["c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8", "c_9"];
 var cascadebox_header = [];
