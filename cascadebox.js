@@ -133,6 +133,7 @@ _cascadebox.prototype = {
                 if(flag){
                     if(parentid == 0){
                         $('#'+this_dom_id+'.cascadebox').find('input[type=checkbox]').prop('checked',true);
+                        $('#'+this_dom_id+'.cascadebox li[has_children=1]').attr('children_select_all',1);
                     }else{
                         this_div.find('input[type=checkbox]').prop('checked',true);
                         if(parentid){
@@ -155,6 +156,7 @@ _cascadebox.prototype = {
                 }else{
                     if(parentid == 0){
                         $('#'+this_dom_id+'.cascadebox').find('input[type=checkbox]').prop('checked',false);
+                        $('#'+this_dom_id+'.cascadebox li[has_children=1]').attr('children_select_all',0);
                     }else{
                         this_div.find('input[type=checkbox]').prop('checked',false);
                         if(parentid){
