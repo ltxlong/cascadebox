@@ -494,6 +494,25 @@ _cascadebox.prototype = {
             }
 
         });
+    },
+    hide_item_only:function (val) {
+        var the_hide_item = $('#'+this.dom_id+'.cascadebox li[v='+val+']');
+        the_hide_item.hide();
+        if(the_hide_item.attr('has_children') == 1)
+            this.hide_all_children_only(val);
+    },
+    hide_all_children_only:function (val) {
+        var child_div = $('#'+this.dom_id+'.cascadebox div[parent_id='+val+']');
+        var outer_child_top_div = child_div.parent();
+        outer_child_top_div.hide();
+        var that = this;
+        child_div.find('input[type=checkbox]').each(function () {
+            var this_li = $(this).parent().parent();
+            if(this_li.attr('has_children') == 1){
+                that.hide_all_children(this_li.attr('v'));
+            }
+
+        });
     }
 };
 
