@@ -306,7 +306,7 @@ _cascadebox.prototype = {
         var top_box_all_flag = top_box.find('input[type=checkbox][value="-1"]').is(':checked');
         var all_select_first_box = false;
         if(top_box_all_flag){
-            //如果顶级选项全新，并且所有选项都有复选框，那么直接显示所有顶级选项
+            //如果顶级选项全选，并且所有选项都有复选框，那么直接显示所有顶级选项
             var all_has_checkbox = true;
             top_box.find('li').each(function () {
                 if($(this).attr('v') == undefined || $(this).attr('v') == -1) return;
@@ -456,6 +456,42 @@ _cascadebox.prototype = {
         $('#'+this_dom_id+'.cascadebox li.selected').each(function () {
             $(this).trigger('click');
         });
+
+    },
+    set_data_only:function (select_data) {
+        var this_dom_id = this.dom_id;
+        var html = '<a class="clear_header">清空全部已选</a>';
+        var the_cascadebox_list_div = $("#"+this_dom_id+" .cascadebox_list");
+        for(var i=0; i< select_data.length; i++){
+            var the_checkbox = the_cascadebox_list_div.find('input[type=checkbox][value="'+select_data[i]+'"]');
+            the_checkbox.prop('checked',true);
+            var text = the_checkbox.parent().next().html();
+            html += "<div><label>"+text+"</label><span v="+select_data[i]+">x</span></div>";
+
+        }
+
+        $("#"+this_dom_id+" .cascadebox_header").html(html);
+
+        $("#"+this_dom_id+" .cascadebox_header span").on('click',function(){
+            var obj = $(this);
+            var id = obj.attr('v');
+            var span_div = obj.parent();
+            var header_div = span_div.parent();
+            if(header_div.find('div').length < 2){
+                header_div.find('a').remove();
+            }
+            header_div.prev(".cascadebox_list").find('input[type=checkbox][value='+id+']').trigger('click');
+            span_div.remove();
+        });
+
+        $("#"+this_dom_id+" .cascadebox_header a").on('click',function(){
+            var obj = $(this);
+            var span_div = obj.parent();
+            span_div.prev('.cascadebox_list').find('input[type=checkbox]').prop('checked',false);
+            span_div.html('');
+            $("#"+this_dom_id+" .selected").removeClass('selected');
+        });
+
 
     },
     add_val:function (val) {
