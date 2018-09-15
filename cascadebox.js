@@ -625,7 +625,7 @@ _cascadebox.prototype = {
  * @param header_data [各级别名称，可以无限级，如果为空(不传)或[]，默认为3个级别，默认名称为['一级选项','二级选项','三级选项']]
  * @param all_flag [是否开启全选模式，可以为空(不传)，默认为true]
  * @param selected_highlight_flag [是否开启选中颜色加深，可以为空(不传)，默认为true。注意，选项太多的时候，开启会导致卡顿]
- * @param oppose_div_id [对立cascadebox的div的id]
+ * @param oppose_div_id [对立cascadebox的div的id，可以为空(不传)，默认为null]
  * @returns {_cascadebox} [返回cascadeBox实例]
  */
 function cascadeBox(id, name, data, selected, header_data, all_flag, selected_highlight_flag, oppose_div_id){
