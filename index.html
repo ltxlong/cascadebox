@@ -73,6 +73,7 @@
         //参数5：各级别名称，可以无限级，如果为空(不传)或[]，默认为3个级别，名称为['一级选项','二级选项','三级选项']
         //参数6：是否开启全选模式，可以为空(不传)，默认为true
         //参数7：是否开启选中颜色加深，可以为空(不传)，默认为true。注意，选项太多的时候，开启会导致卡顿
+        //参数8：对立cascadebox的div的id(两个cascadebox有同样的选项，是对立关系，一个选项只能在其中一个cascadebox被选中)
         
         //data的格式为：直接将每个节点push进去就行，即data.push(node_obj)；如果想用本插件，但是数据格式不一致的，可以自己写js转换下就行了
         
@@ -96,7 +97,7 @@
         //隐藏某选项(包括其所有子选项,并且删除选中)：obj.hide_item(id)方法
         //隐藏某选项(包括其所有子选项,不会删除选中)：obj.hide_item_only(id)方法
 
-        var obj = cascadeBox('cascadebox','checkboxname',data,["c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8", "c_9"],[],true,true);
+        var obj = cascadeBox('cascadebox','checkboxname',data,["c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8", "c_9"],[],true,true,null);
 
         $('#get_data').click(function () {
             //获取选中的项：obj.get_data()方法
