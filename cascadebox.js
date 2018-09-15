@@ -14,7 +14,9 @@ _cascadebox.prototype = {
     header_data:null,
     all_flag:null,
     selected_highlight_flag:null,
-    init:function(dom_id,name,data,selected = [],header_data = ['一级选项','二级选项','三级选项'],all_flag = true,selected_highlight_flag = true){
+    oppose_box_id:null,
+    oppose_flag:false,
+    init:function(dom_id,name,data,selected = [],header_data = ['一级选项','二级选项','三级选项'],all_flag = true,selected_highlight_flag = true,oppose_box_id = null){
         this.dom_id = dom_id;
         this.name = name;
         this.data = data;
@@ -22,11 +24,17 @@ _cascadebox.prototype = {
         this.header_data = header_data.length == 0 ? ['一级选项','二级选项','三级选项'] : header_data;
         this.all_flag = all_flag;
         this.selected_highlight_flag = selected_highlight_flag;
+        if(oppose_box_id != null && oppose_box_id != ''){
+            this.oppose_box_id = oppose_box_id;
+            this.oppose_flag = true;
+        }
     },
     makeHtml:function(){
         var this_dom_id = this.dom_id;
         var _data = {};
         var _key_to_value = {};
+        var oppose_flag = this.oppose_flag;
+        var oppose_box_id = this.oppose_box_id;
         for(var i in this.data){
             var d = this.data[i];
             _key_to_value[d.id] = d.name;
@@ -134,6 +142,11 @@ _cascadebox.prototype = {
                     if(parentid == 0){
                         $('#'+this_dom_id+'.cascadebox').find('input[type=checkbox]').prop('checked',true);
                         $('#'+this_dom_id+'.cascadebox li[has_children=1]').attr('children_select_all',1);
+                        if(oppose_flag){
+                            $('#'+oppose_box_id+'.cascadebox').find('input[type=checkbox]').prop('checked',false);
+                            $('#'+oppose_box_id+'.cascadebox li[has_children=1]').attr('children_select_all',0);
+                            $('#'+oppose_box_id+'.cascadebox .clear_header').trigger('click');
+                        }
                     }else{
                         this_div.find('input[type=checkbox]').prop('checked',true);
                         if(parentid){
@@ -150,6 +163,26 @@ _cascadebox.prototype = {
                                 children_div.find('input[type=checkbox][value="-1"]').trigger('click');
                             }
                         });
+
+                        if(oppose_flag){
+                            var this_div_oppose = $('#'+oppose_box_id+'.cascadebox div[parent_id='+parentid+']');
+                            var top_div_oppose = this_div_oppose.parent();
+                            this_div_oppose.find('input[type=checkbox]').prop('checked',false);
+                            if(parentid){
+                                $("#"+oppose_box_id+".cascadebox li[v="+parentid+"]").find('input[type=checkbox][value='+parentid+']').prop('checked',false);
+                                $("#"+oppose_box_id+".cascadebox_header span[v="+parentid+"]").trigger('click');
+                            }
+                            this_div_oppose.find('li').each(function () {
+                                var this_li = $(this);
+                                var has_children = this_li.attr('has_children');
+                                var this_id = this_li.attr('v');
+
+                                if(has_children){
+                                    var children_div = top_div_oppose.parent().find('div[parent_id="'+this_id+'"]');
+                                    children_div.find('input[type=checkbox]').prop('checked',false);
+                                }
+                            });
+                        }
                     }
 
 
@@ -180,18 +213,43 @@ _cascadebox.prototype = {
                 if(has_children == 1){
                     var children_all_checkbox  =  top_div.parent().find('div[parent_id='+id+']').find('input[type=checkbox][value="-1"]');
                     children_all_checkbox.trigger('click');
+                    if(oppose_flag){
+                        if(flag){
+                            var top_div_oppose = $('#'+oppose_box_id+'.cascadebox div[parent_id='+parentid+']').parent();
+                            var the_checkbox_oppose = top_div_oppose.find('input[type=checkbox][value='+id+']');
+                            var the_checkbox_oppose_flag = the_checkbox_oppose.is(':checked');
+                            if(the_checkbox_oppose_flag){
+                                the_checkbox_oppose.trigger('click');
+                            }
+                        }
+                    }
                 }else{
                     if(parentid == 0){
                         firstbox_nochildren_op = true;
                     }else{
                         firstbox_nochildren_op = false;
                     }
+                    if(oppose_flag){
+                        if(flag){
+                            var top_div_oppose = $('#'+oppose_box_id+'.cascadebox div[parent_id='+parentid+']').parent();
+                            var the_checkbox_oppose = top_div_oppose.find('input[type=checkbox][value='+id+']');
+                            var the_checkbox_oppose_flag = the_checkbox_oppose.is(':checked');
+                            if(the_checkbox_oppose_flag){
+                                the_checkbox_oppose.trigger('click');
+                            }
+                        }
+                    }
                 }
 
             }
 
             if(parentid != 0){
-                that.change_all(top_div,parentid,id,flag);
+                if(oppose_flag){
+                    var top_div_oppose = $('#'+oppose_box_id+'.cascadebox div[parent_id='+parentid+']').parent();
+                }else{
+                    var top_div_oppose = null;
+                }
+                that.change_all(top_div,parentid,id,flag,oppose_flag,top_div_oppose);
             }
 
             if(firstbox_nochildren_op){
@@ -209,7 +267,7 @@ _cascadebox.prototype = {
                     if($("#"+this_dom_id+" .cascadebox_header a").length == 0){
                         $('#'+this_dom_id+' .cascadebox_header').append('<a class="clear_header">清空全部已选</a>');
                     }
-                    
+
                     $('#'+this_dom_id+' .cascadebox_header').append("<div><label>"+text+"</label><span v="+id+">x</span></div>");
 
                     $("#"+this_dom_id+" .cascadebox_header span").on('click',function(){
@@ -391,7 +449,7 @@ _cascadebox.prototype = {
             this.selected("#"+this.dom_id+" li[v="+parentid+"]");
         }
     },
-    change_all:function (top_div,parentid,id, op_flag) {
+    change_all:function (top_div,parentid,id, op_flag, oppose_flag, top_div_oppose) {
 
         var parent_li = $("#"+this.dom_id+".cascadebox li[v="+parentid+"]");
         var parent_top_div = parent_li.parent().parent();
@@ -423,6 +481,12 @@ _cascadebox.prototype = {
                 if(parent_li.attr('children_select_all') != undefined)
                     parent_li.attr('children_select_all',0);
             }
+            if(oppose_flag){
+                var parent_li_oppose = $("#"+this.oppose_box_id+".cascadebox li[v="+parentid+"]");
+                top_div_oppose.find('input[type=checkbox][value="-1"]').prop('checked',false);
+                if(parent_li_oppose.attr('children_select_all') != undefined)
+                    parent_li_oppose.attr('children_select_all',0);
+            }
         }else{
 
             if(parent_li.attr('children_select_all') != undefined)
@@ -433,7 +497,7 @@ _cascadebox.prototype = {
 
         }
         if(parentid !== 0 && parentid !== undefined){
-            this.change_all(parent_top_div,parent_parentid,parentid, op_flag);
+            this.change_all(parent_top_div,parent_parentid,parentid, op_flag, oppose_flag, top_div_oppose);
         }
 
     },
@@ -561,11 +625,12 @@ _cascadebox.prototype = {
  * @param header_data [各级别名称，可以无限级，如果为空(不传)或[]，默认为3个级别，默认名称为['一级选项','二级选项','三级选项']]
  * @param all_flag [是否开启全选模式，可以为空(不传)，默认为true]
  * @param selected_highlight_flag [是否开启选中颜色加深，可以为空(不传)，默认为true。注意，选项太多的时候，开启会导致卡顿]
+ * @param oppose_div_id [对立cascadebox的div的id]
  * @returns {_cascadebox} [返回cascadeBox实例]
  */
-function cascadeBox(id, name, data, selected, header_data, all_flag, selected_highlight_flag){
+function cascadeBox(id, name, data, selected, header_data, all_flag, selected_highlight_flag, oppose_div_id){
     var obj = new _cascadebox();
-    obj.init(id, name, data, selected, header_data, all_flag, selected_highlight_flag);
+    obj.init(id, name, data, selected, header_data, all_flag, selected_highlight_flag, oppose_div_id);
     obj.makeHtml();
     return obj;
 }
