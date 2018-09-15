@@ -13,6 +13,7 @@ js多级联动多选checkbox插件
 - 参数5：各级别名称，可以无限级，如果为空(不传)或[]，默认为3个级别，名称为['一级选项','二级选项','三级选项']
 - 参数6：是否开启全选模式，可以为空(不传)，默认为true
 - 参数7：是否开启选中颜色加深，可以为空(不传)，默认为true。注意，选项太多的时候，开启会导致卡顿
+- 参数8：对立cascadebox的div的id(两个cascadebox有同样的选项，是对立关系，一个选项只能在其中一个cascadebox被选中)
 
 - data的格式为：直接将每个节点push进去就行，即data.push(node_obj)；如果想用本插件，但是数据格式不一致的，可以自己写js转换下就行了
 
@@ -43,9 +44,14 @@ var cascadebox_header = [];
 //如果想某一级别的cascadebox_header显示父级的名称，那么只要传参为''即可。
 //例如想要城市级别的cascadebox_header动态显示父级名称，即传参应为['省份','','区县']。
 //var obj = cascadeBox('cascadebox','checkboxname',data); //初始化插件，返回cascadeBox实例
-var obj = cascadeBox('cascadebox','checkboxname',data,pre_select_data,cascadebox_header,true,true);
+var obj = cascadeBox('cascadebox','checkboxname',data,pre_select_data,cascadebox_header,true,true,null);
 
 var select_data = obj.get_data();
+
+//两个cascadebox对立关系：
+//var include_obj = cascadeBox('cascadebox_include','checkboxname_include',data,pre_select_data,cascadebox_header,true,true,'cascadebox_exclude');
+//var exclude_obj = cascadeBox('cascadebox_exclude','checkboxname_exclude',data,pre_select_data,cascadebox_header,true,true,'cascadebox_include');
+
 ```
 
 结合bootstrap，拥抱响应式：
