@@ -37,6 +37,7 @@ js多级联动多选checkbox插件
 - 显示某选项(包括其所有子选项)：obj.show_item(id)方法
 - 隐藏某选项(包括其所有子选项,并且删除选中)：obj.hide_item(id)方法
 - 隐藏某选项(包括其所有子选项,不会删除选中)：obj.hide_item_only(id)方法
+- 注意：隐藏某选项，在全选的时候，还是会选中的 = =
 ```js
 var pre_select_data = ["c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8", "c_9"];
 var cascadebox_header = [];
